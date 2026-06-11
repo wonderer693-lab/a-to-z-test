@@ -1,0 +1,46 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Contact Us - FieldServicePros" description="Get in touch with the FieldServicePros team. Questions, feedback, or partnership inquiries welcome.">
+  <div class="container">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <ol><li><a href="/">Home</a></li><li aria-current="page">Contact</li></ol>
+    </nav>
+  </div>
+
+  <section class="page-hero">
+    <div class="container">
+      <h1>Contact Us</h1>
+      <p>Have a question or feedback? We would love to hear from you.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container content">
+      <p>You can reach us at <strong>contact@fieldservicepros.com</strong>. We aim to respond within 24 hours during business days.</p>
+      <p>We welcome questions about our reviews, suggestions for new tools to cover, and feedback on how we can improve. If you are a software vendor and want us to review your product, send us a note.</p>
+      <div class="card contact-card">
+        <h3>Partnership inquiries</h3>
+        <p>For affiliate partnership inquiries, please include your program name and commission structure in your message.</p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+.breadcrumbs { padding: var(--space-4) 0; }
+.breadcrumbs ol { list-style: none; display: flex; gap: var(--space-2); padding: 0; margin: 0; font-size: 0.875rem; }
+.breadcrumbs li { color: var(--color-gray-500); }
+.breadcrumbs li:not(:last-child)::after { content: '/'; margin-left: var(--space-2); color: var(--color-gray-300); }
+.breadcrumbs a { color: var(--color-gray-500); }
+.breadcrumbs [aria-current] { color: var(--color-gray-700); font-weight: 500; }
+.page-hero { background: var(--color-gray-50); padding: var(--space-12) 0; border-bottom: 1px solid var(--color-gray-200); }
+.page-hero h1 { margin-bottom: var(--space-3); }
+.page-hero p { color: var(--color-gray-600); max-width: 640px; font-size: 1.0625rem; }
+.section { padding: var(--space-12) 0; }
+.section p { color: var(--color-gray-700); line-height: 1.7; }
+.contact-card { margin-top: var(--space-6); }
+.contact-card h3 { margin-top: 0; }
+.contact-card p { margin: 0; }
+</style>

@@ -1,0 +1,168 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import StarRating from '@components/StarRating.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const reviews = await getCollection('review');
+  return reviews.map(r => ({
+    params: { slug: r.id },
+    props: { review: r },
+  }));
+}
+
+const { review } = Astro.props;
+const { data, body } = review;
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": data.title,
+  "description": data.description,
+  "brand": { "@type": "Brand", "name": data.title },
+  "offers": {
+    "@type": "Offer",
+    "price": data.priceRange.replace(/[^0-9]/g, ''),
+    "priceCurrency": "USD",
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": data.rating,
+    "bestRating": 5,
+    "worstRating": 1,
+    "ratingCount": 1,
+  },
+};
+---
+
+<BaseLayout title={`${data.title} Review 2026 - Features, Pricing, Pros & Cons`} description={data.description} jsonLd={jsonLd}>
+  <div class="container">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <ol>
+        <li><a href="/">Home</a></li>
+        <li><a href="/software/">{data.bestFor.includes("HVAC") ? "HVAC" : data.bestFor.includes("Plumbing") ? "Plumbing" : "Electrical"} Software</a></li>
+        <li aria-current="page">{data.title} Review</li>
+      </ol>
+    </nav>
+  </div>
+
+  <article class="review-page">
+    <div class="container">
+      <header class="review-header">
+        <div class="review-header-top">
+          <div>
+            <h1>{data.title} Review</h1>
+            <p class="review-tagline">{data.description}</p>
+          </div>
+          <div class="review-rating-box">
+            <StarRating rating={data.rating} size="lg" />
+            <span class="review-price">{data.priceRange}</span>
+            <span class="badge badge-primary">{data.bestFor}</span>
+          </div>
+        </div>
+        <div class="review-header-actions">
+          <a href={data.affiliateUrl} class="btn btn-primary btn-lg" target="_blank" rel="noopener sponsored">Visit {data.title}</a>
+        </div>
+      </header>
+
+      <div class="review-grid">
+        <div class="review-content">
+          <div class="review-pros-cons">
+            <div class="pros-box card">
+              <h3>Pros</h3>
+              <ul>
+                {data.pros.map(p => <li>{p}</li>)}
+              </ul>
+            </div>
+            <div class="cons-box card">
+              <h3>Cons</h3>
+              <ul>
+                {data.cons.map(c => <li>{c}</li>)}
+              </ul>
+            </div>
+          </div>
+
+          <div class="review-body">
+            <div set:html={body} />
+          </div>
+        </div>
+
+        <aside class="review-sidebar">
+          <div class="sidebar-card card">
+            <h3>Quick Facts</h3>
+            <dl class="quick-facts">
+              <dt>Rating</dt>
+              <dd>{data.rating}/5</dd>
+              <dt>Price Range</dt>
+              <dd>{data.priceRange}</dd>
+              <dt>Best For</dt>
+              <dd>{data.bestFor}</dd>
+            </dl>
+          </div>
+
+          <div class="sidebar-card card">
+            <h3>Key Features</h3>
+            <ul class="sidebar-features">
+              {data.keyFeatures.map(f => <li>{f}</li>)}
+            </ul>
+          </div>
+
+          <div class="sidebar-card card">
+            <h3>Integrations</h3>
+            <ul class="sidebar-integrations">
+              {data.integrations.map(i => <li>{i}</li>)}
+            </ul>
+          </div>
+
+          <a href={data.affiliateUrl} class="btn btn-primary" target="_blank" rel="noopener sponsored">Visit {data.title}</a>
+        </aside>
+      </div>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+.breadcrumbs { padding: var(--space-4) 0; }
+.breadcrumbs ol { list-style: none; display: flex; gap: var(--space-2); padding: 0; margin: 0; }
+.breadcrumbs li { font-size: 0.875rem; color: var(--color-gray-500); }
+.breadcrumbs li:not(:last-child)::after { content: '/'; margin-left: var(--space-2); color: var(--color-gray-300); }
+.breadcrumbs a { color: var(--color-gray-500); }
+.breadcrumbs [aria-current] { color: var(--color-gray-700); font-weight: 500; }
+
+.review-page { padding-bottom: var(--space-16); }
+.review-header { margin-bottom: var(--space-8); }
+.review-header-top { display: flex; justify-content: space-between; gap: var(--space-6); align-items: flex-start; flex-wrap: wrap; }
+.review-header-top h1 { margin: 0; font-size: 2rem; }
+.review-tagline { color: var(--color-gray-500); font-size: 1.0625rem; margin-top: var(--space-2); }
+.review-rating-box { text-align: center; min-width: 180px; }
+.review-price { display: block; color: var(--color-gray-600); font-weight: 600; margin-top: var(--space-2); }
+.review-header-actions { margin-top: var(--space-4); }
+
+.review-grid { display: grid; grid-template-columns: 1fr 320px; gap: var(--space-8); }
+
+.review-pros-cons { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); margin-bottom: var(--space-8); }
+.pros-box h3 { color: var(--color-green); margin-top: 0; }
+.pros-box ul { margin: 0; }
+.cons-box h3 { color: var(--color-red); margin-top: 0; }
+.cons-box ul { margin: 0; }
+
+.review-body { line-height: 1.7; color: var(--color-gray-700); }
+.review-body p { margin-bottom: var(--space-4); }
+
+.sidebar-card { margin-bottom: var(--space-4); }
+.sidebar-card h3 { margin-top: 0; font-size: 1rem; }
+.quick-facts { margin: 0; }
+.quick-facts dt { font-size: 0.8125rem; color: var(--color-gray-500); text-transform: uppercase; letter-spacing: 0.05em; margin-top: var(--space-3); }
+.quick-facts dt:first-child { margin-top: 0; }
+.quick-facts dd { margin: var(--space-1) 0 0; font-weight: 500; }
+.sidebar-features, .sidebar-integrations { padding-left: var(--space-4); margin: 0; }
+.sidebar-features li, .sidebar-integrations li { font-size: 0.875rem; margin-bottom: var(--space-2); }
+.sidebar-card + .btn { width: 100%; justify-content: center; }
+
+@media (max-width: 768px) {
+  .review-grid { grid-template-columns: 1fr; }
+  .review-pros-cons { grid-template-columns: 1fr; }
+  .review-header-top { flex-direction: column; }
+  .review-rating-box { text-align: left; }
+}
+</style>

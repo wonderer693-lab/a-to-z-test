@@ -1,0 +1,236 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import ReviewCard from '@components/ReviewCard.astro';
+import StarRating from '@components/StarRating.astro';
+import { getCollection } from 'astro:content';
+
+const featuredReviews = await getCollection('review', (r) => r.data.featured);
+const allReviews = await getCollection('review');
+const featuredComparisons = await getCollection('comparison', (c) => c.data.featured);
+
+const topRated = allReviews.sort((a, b) => b.data.rating - a.data.rating).slice(0, 6);
+
+const homeSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "FieldServicePros",
+  "url": "https://fieldservicepros.com",
+  "description": "Independent reviews and comparisons of field service management software for HVAC, plumbing, and electrical contractors.",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://fieldservicepros.com/search?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+};
+---
+
+<BaseLayout title="Field Service Software Reviews & Comparisons for Contractors" description="Compare the best field service management software for HVAC, plumbing, and electrical contractors. Independent reviews, side-by-side comparisons, and expert buying guides." jsonLd={homeSchema}>
+  <section class="hero">
+    <div class="container hero-inner">
+      <div class="hero-content">
+        <h1 class="hero-title">Find the Right Field Service Software for Your Business</h1>
+        <p class="hero-subtitle">Independent reviews and side-by-side comparisons of the top field service management platforms. We help HVAC, plumbing, and electrical contractors pick the right tool.</p>
+        <div class="hero-ctas">
+          <a href="/comparisons/" class="btn btn-primary btn-lg">Compare Top Software</a>
+          <a href="/software/hvac/" class="btn btn-outline btn-lg">Browse HVAC Solutions</a>
+        </div>
+        <div class="hero-trust">
+          <span class="hero-trust-item">Independent reviews</span>
+          <span class="hero-trust-item">Updated regularly</span>
+          <span class="hero-trust-item">Real contractor feedback</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Top Rated Field Service Software</h2>
+        <p>Our independent reviews cover features, pricing, integrations, and real user experiences to help you decide.</p>
+      </div>
+      <div class="grid grid-3">
+        {topRated.map(r => <ReviewCard review={r} />)}
+      </div>
+      <div class="section-footer">
+        <a href="/comparisons/" class="btn btn-primary">View All Comparisons</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-header">
+        <h2>Software by Trade</h2>
+        <p>Find software built for your specific trade. Each category covers the unique needs of your industry.</p>
+      </div>
+      <div class="grid grid-3">
+        <div class="category-card card">
+          <h3><a href="/software/hvac/">HVAC Software</a></h3>
+          <p>Dispatch, maintenance agreements, load calculations, and EPA compliance tracking for HVAC contractors.</p>
+          <a href="/software/hvac/" class="btn btn-outline">Browse HVAC Software</a>
+        </div>
+        <div class="category-card card">
+          <h3><a href="/software/plumbing/">Plumbing Software</a></h3>
+          <p>Job scheduling, permit tracking, inventory management, and invoicing built for plumbing businesses.</p>
+          <a href="/software/plumbing/" class="btn btn-outline">Browse Plumbing Software</a>
+        </div>
+        <div class="category-card card">
+          <h3><a href="/software/electrical/">Electrical Software</a></h3>
+          <p>Code compliance, project estimation, work order management, and mobile tools for electricians.</p>
+          <a href="/software/electrical/" class="btn btn-outline">Browse Electrical Software</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Buying Guides & Resources</h2>
+        <p>Everything you need to know before buying field service software. No fluff, just practical advice.</p>
+      </div>
+      <div class="grid grid-3">
+        <div class="resource-card card">
+          <h3><a href="/guides/choosing-fsm-software/">How to Choose FSM Software</a></h3>
+          <p>8-step framework for evaluating and selecting the right platform for your contracting business.</p>
+        </div>
+        <div class="resource-card card">
+          <h3><a href="/guides/fsm-pricing-models/">FSM Pricing Models Explained</a></h3>
+          <p>Per-technician vs flat-rate vs tiered pricing. What to expect at each price point.</p>
+        </div>
+        <div class="resource-card card">
+          <h3><a href="/guides/roi-calculator/">FSM ROI Calculator</a></h3>
+          <p>Estimate your potential savings from switching to field service software.</p>
+        </div>
+      </div>
+      <div class="section-footer">
+        <a href="/guides/" class="btn btn-outline">View All Guides</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-cta">
+    <div class="container">
+      <div class="cta-box card">
+        <h2>Not Sure Where to Start?</h2>
+        <p>Answer 3 quick questions and get a personalized recommendation based on your business size, trade, and budget.</p>
+        <a href="/comparisons/" class="btn btn-accent btn-lg">Help Me Choose</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+.hero {
+  background: linear-gradient(135deg, var(--color-gray-900) 0%, var(--color-primary-dark) 100%);
+  color: var(--color-white);
+  padding: var(--space-16) 0;
+}
+.hero-inner {
+  display: flex;
+  align-items: center;
+}
+.hero-content {
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: center;
+}
+.hero-title {
+  font-size: 2.5rem;
+  color: var(--color-white);
+  margin-bottom: var(--space-4);
+  line-height: 1.2;
+}
+.hero-subtitle {
+  font-size: 1.125rem;
+  color: var(--color-gray-300);
+  margin-bottom: var(--space-8);
+  line-height: 1.6;
+}
+.hero-ctas {
+  display: flex;
+  gap: var(--space-4);
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: var(--space-8);
+}
+.hero-trust {
+  display: flex;
+  gap: var(--space-6);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.hero-trust-item {
+  font-size: 0.875rem;
+  color: var(--color-gray-400);
+}
+.hero-trust-item::before {
+  content: '\2713';
+  color: var(--color-green);
+  margin-right: var(--space-2);
+}
+.section {
+  padding: var(--space-16) 0;
+}
+.section-alt {
+  background: var(--color-gray-50);
+}
+.section-header {
+  text-align: center;
+  max-width: 640px;
+  margin: 0 auto var(--space-10);
+}
+.section-header h2 {
+  margin-top: 0;
+}
+.section-header p {
+  color: var(--color-gray-500);
+}
+.section-footer {
+  text-align: center;
+  margin-top: var(--space-10);
+}
+.section-cta {
+  background: var(--color-gray-50);
+}
+.cta-box {
+  text-align: center;
+  padding: var(--space-10);
+  max-width: 640px;
+  margin: 0 auto;
+}
+.cta-box h2 {
+  margin-top: 0;
+}
+.category-card {
+  text-align: center;
+}
+.category-card h3 {
+  margin-top: 0;
+}
+.category-card h3 a {
+  color: var(--color-gray-900);
+}
+.resource-card h3 {
+  margin-top: 0;
+  font-size: 1.125rem;
+}
+.resource-card h3 a {
+  color: var(--color-gray-900);
+}
+.resource-card p {
+  color: var(--color-gray-600);
+  font-size: 0.9375rem;
+}
+@media (max-width: 768px) {
+  .hero { padding: var(--space-10) 0; }
+  .hero-title { font-size: 1.75rem; }
+  .hero-subtitle { font-size: 1rem; }
+  .section { padding: var(--space-10) 0; }
+}
+.btn-lg {
+  padding: var(--space-4) var(--space-8);
+  font-size: 1.0625rem;
+}
+</style>

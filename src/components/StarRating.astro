@@ -1,0 +1,53 @@
+---
+export interface Props {
+  rating: number;
+  max?: number;
+  size?: 'sm' | 'md' | 'lg';
+  showText?: boolean;
+}
+
+const { rating, max = 5, size = 'md', showText = true } = Astro.props;
+const fullStars = Math.floor(rating);
+const hasHalf = rating % 1 >= 0.5;
+const emptyStars = max - fullStars - (hasHalf ? 1 : 0);
+
+const sizes = {
+  sm: { star: '1rem', text: '0.8125rem' },
+  md: { star: '1.25rem', text: '0.9375rem' },
+  lg: { star: '1.5rem', text: '1.0625rem' },
+};
+---
+
+<div class="star-rating" aria-label={`${rating} out of ${max} stars`}>
+  <span class="stars" style={`font-size: ${sizes[size].star}`}>
+    {Array.from({ length: fullStars }, (_, i) => (
+      <span class="star" key={`full-${i}`}>&#9733;</span>
+    ))}
+    {hasHalf && <span class="star star-half">&#9733;</span>}
+    {Array.from({ length: emptyStars }, (_, i) => (
+      <span class="star-empty" key={`empty-${i}`}>&#9733;</span>
+    ))}
+  </span>
+  {showText && <span class="rating-text" style={`font-size: ${sizes[size].text}`}}>{rating}/5</span>}
+</div>
+
+<style>
+.star-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.star {
+  color: var(--color-accent);
+}
+.star-half {
+  opacity: 0.6;
+}
+.star-empty {
+  color: var(--color-gray-300);
+}
+.rating-text {
+  color: var(--color-gray-500);
+  font-weight: 600;
+}
+</style>

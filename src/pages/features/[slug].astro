@@ -1,0 +1,60 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const features = await getCollection('feature');
+  return features.map(f => ({
+    params: { slug: f.id },
+    props: { feature: f },
+  }));
+}
+
+const { feature } = Astro.props;
+const { data, body } = feature;
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": data.title,
+  "description": data.description,
+  "datePublished": data.pubDate.toISOString(),
+};
+---
+
+<BaseLayout title={data.title} description={data.description} jsonLd={jsonLd}>
+  <div class="container">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <ol><li><a href="/">Home</a></li><li aria-current="page">{data.title}</li></ol>
+    </nav>
+  </div>
+
+  <article class="feature-page">
+    <div class="container">
+      <header class="feature-header">
+        <span class="badge badge-primary">{data.category}</span>
+        <h1>{data.title}</h1>
+        <p class="feature-desc">{data.description}</p>
+      </header>
+
+      <div class="feature-body content">
+        <div set:html={body} />
+      </div>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+.breadcrumbs { padding: var(--space-4) 0; }
+.breadcrumbs ol { list-style: none; display: flex; gap: var(--space-2); padding: 0; margin: 0; }
+.breadcrumbs li { font-size: 0.875rem; color: var(--color-gray-500); }
+.breadcrumbs li:not(:last-child)::after { content: '/'; margin-left: var(--space-2); color: var(--color-gray-300); }
+.breadcrumbs a { color: var(--color-gray-500); }
+.breadcrumbs [aria-current] { color: var(--color-gray-700); font-weight: 500; }
+.feature-page { padding-bottom: var(--space-16); }
+.feature-header { margin-bottom: var(--space-8); padding-bottom: var(--space-6); border-bottom: 1px solid var(--color-gray-200); }
+.feature-header h1 { margin: var(--space-3) 0; }
+.feature-desc { color: var(--color-gray-500); font-size: 1.0625rem; }
+.feature-body { line-height: 1.7; color: var(--color-gray-700); }
+.feature-body p { margin-bottom: var(--space-4); }
+</style>

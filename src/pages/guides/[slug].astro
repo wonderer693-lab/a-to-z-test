@@ -1,0 +1,70 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const guides = await getCollection('guide');
+  return guides.map(g => ({
+    params: { slug: g.id },
+    props: { guide: g },
+  }));
+}
+
+const { guide } = Astro.props;
+const { data, body } = guide;
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": data.title,
+  "description": data.description,
+  "datePublished": data.pubDate.toISOString(),
+};
+---
+
+<BaseLayout title={data.title} description={data.description} jsonLd={jsonLd}>
+  <div class="container">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <ol>
+        <li><a href="/">Home</a></li>
+        <li><a href="/guides/">Guides</a></li>
+        <li aria-current="page">{data.title}</li>
+      </ol>
+    </nav>
+  </div>
+
+  <article class="guide-page">
+    <div class="container">
+      <header class="guide-header">
+        <div class="guide-meta">
+          <span class="badge badge-primary">{data.category}</span>
+          <span class="guide-reading">{data.readingTime}</span>
+        </div>
+        <h1>{data.title}</h1>
+        <p class="guide-desc">{data.description}</p>
+      </header>
+
+      <div class="guide-body content">
+        <div set:html={body} />
+      </div>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+.breadcrumbs { padding: var(--space-4) 0; }
+.breadcrumbs ol { list-style: none; display: flex; gap: var(--space-2); padding: 0; margin: 0; }
+.breadcrumbs li { font-size: 0.875rem; color: var(--color-gray-500); }
+.breadcrumbs li:not(:last-child)::after { content: '/'; margin-left: var(--space-2); color: var(--color-gray-300); }
+.breadcrumbs a { color: var(--color-gray-500); }
+.breadcrumbs [aria-current] { color: var(--color-gray-700); font-weight: 500; }
+.guide-page { padding-bottom: var(--space-16); }
+.guide-meta { display: flex; gap: var(--space-3); align-items: center; margin-bottom: var(--space-3); }
+.guide-reading { font-size: 0.875rem; color: var(--color-gray-500); }
+.guide-header { margin-bottom: var(--space-8); border-bottom: 1px solid var(--color-gray-200); padding-bottom: var(--space-6); }
+.guide-header h1 { margin: var(--space-3) 0; }
+.guide-desc { color: var(--color-gray-500); font-size: 1.0625rem; }
+.guide-body { line-height: 1.7; color: var(--color-gray-700); }
+.guide-body p { margin-bottom: var(--space-4); }
+.guide-body strong { color: var(--color-gray-900); }
+</style>

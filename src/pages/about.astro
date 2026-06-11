@@ -1,0 +1,41 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="About FieldServicePros - Independent FSM Software Reviews" description="We help HVAC, plumbing, and electrical contractors find the right field service management software through independent reviews and comparisons.">
+  <div class="container">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <ol><li><a href="/">Home</a></li><li aria-current="page">About</li></ol>
+    </nav>
+  </div>
+
+  <section class="page-hero">
+    <div class="container">
+      <h1>About FieldServicePros</h1>
+      <p>We help contractors find the right field service software through honest, independent reviews.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container content">
+      <p>FieldServicePros was created to help HVAC, plumbing, and electrical contractors make better decisions about field service management software.</p>
+      <p>Most software review sites are either too generic to be useful or too focused on SEO to be honest. We take a different approach. Every review on this site is written by someone who understands how contracting businesses work. We test the software ourselves, talk to real users, and give you the information you actually need to make a decision.</p>
+      <p>We are funded entirely through affiliate commissions. When you click a link on our site and make a purchase, we may earn a commission at no extra cost to you. This does not affect our reviews or recommendations. We recommend tools based on what we believe is best for our readers, not on who pays the highest commission.</p>
+      <p>If you have questions or feedback, we want to hear from you.</p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+.breadcrumbs { padding: var(--space-4) 0; }
+.breadcrumbs ol { list-style: none; display: flex; gap: var(--space-2); padding: 0; margin: 0; font-size: 0.875rem; }
+.breadcrumbs li { color: var(--color-gray-500); }
+.breadcrumbs li:not(:last-child)::after { content: '/'; margin-left: var(--space-2); color: var(--color-gray-300); }
+.breadcrumbs a { color: var(--color-gray-500); }
+.breadcrumbs [aria-current] { color: var(--color-gray-700); font-weight: 500; }
+.page-hero { background: var(--color-gray-50); padding: var(--space-12) 0; border-bottom: 1px solid var(--color-gray-200); }
+.page-hero h1 { margin-bottom: var(--space-3); }
+.page-hero p { color: var(--color-gray-600); max-width: 640px; font-size: 1.0625rem; }
+.section { padding: var(--space-12) 0; }
+.section p { color: var(--color-gray-700); line-height: 1.7; }
+</style>

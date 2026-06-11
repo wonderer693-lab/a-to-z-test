@@ -1,0 +1,66 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const guides = await getCollection('guide');
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "Field Service Software Buying Guides",
+  "description": "Expert buying guides for field service management software.",
+};
+---
+
+<BaseLayout title="Field Service Software Buying Guides - FSM Tips & Resources" description="Expert buying guides, pricing breakdowns, and implementation advice for field service management software." jsonLd={schema}>
+  <div class="container">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <ol><li><a href="/">Home</a></li><li aria-current="page">Guides</li></ol>
+    </nav>
+  </div>
+
+  <section class="page-hero">
+    <div class="container">
+      <h1>Field Service Software Buying Guides</h1>
+      <p>Practical guides to help you choose, buy, and implement field service management software. No fluff, just what works.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="guides-grid">
+        {guides.map(g => (
+          <div class="card guide-card">
+            <div class="guide-meta">
+              <span class="badge badge-primary">{g.data.category}</span>
+              <span class="guide-reading">{g.data.readingTime}</span>
+            </div>
+            <h2><a href={`/guides/${g.id}/`}>{g.data.title}</a></h2>
+            <p>{g.data.description}</p>
+            <a href={`/guides/${g.id}/`} class="btn btn-outline">Read Guide</a>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+.breadcrumbs { padding: var(--space-4) 0; }
+.breadcrumbs ol { list-style: none; display: flex; gap: var(--space-2); padding: 0; margin: 0; }
+.breadcrumbs li { font-size: 0.875rem; color: var(--color-gray-500); }
+.breadcrumbs li:not(:last-child)::after { content: '/'; margin-left: var(--space-2); color: var(--color-gray-300); }
+.breadcrumbs a { color: var(--color-gray-500); }
+.breadcrumbs [aria-current] { color: var(--color-gray-700); font-weight: 500; }
+.page-hero { background: var(--color-gray-50); padding: var(--space-12) 0; border-bottom: 1px solid var(--color-gray-200); }
+.page-hero h1 { margin-bottom: var(--space-3); }
+.page-hero p { color: var(--color-gray-600); max-width: 640px; font-size: 1.0625rem; }
+.section { padding: var(--space-12) 0; }
+.guides-grid { display: grid; grid-template-columns: 1fr; gap: var(--space-6); max-width: 800px; }
+.guide-card { }
+.guide-meta { display: flex; gap: var(--space-3); align-items: center; margin-bottom: var(--space-3); }
+.guide-reading { font-size: 0.875rem; color: var(--color-gray-500); }
+.guide-card h2 { margin-top: 0; font-size: 1.25rem; }
+.guide-card h2 a { color: var(--color-gray-900); }
+.guide-card p { color: var(--color-gray-600); }
+</style>

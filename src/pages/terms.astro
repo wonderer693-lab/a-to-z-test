@@ -1,0 +1,45 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Terms of Use - FieldServicePros" description="Terms of use for FieldServicePros website.">
+  <div class="container">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <ol><li><a href="/">Home</a></li><li aria-current="page">Terms of Use</li></ol>
+    </nav>
+  </div>
+
+  <section class="page-hero">
+    <div class="container">
+      <h1>Terms of Use</h1>
+      <p>By using this site, you agree to these terms.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container content terms-content">
+      <h2>Content accuracy</h2>
+      <p>We strive to keep all information on this site accurate and up to date. However, software features and pricing change frequently. We recommend verifying details with the vendor before making a purchasing decision.</p>
+
+      <h2>Affiliate disclosure</h2>
+      <p>FieldServicePros participates in affiliate marketing programs. We may earn commissions on purchases made through links on this site. This does not affect the price you pay or our editorial independence.</p>
+
+      <h2>No warranty</h2>
+      <p>The information on this site is provided as-is without any warranty. We are not responsible for any losses or damages resulting from the use of this site or the software we review.</p>
+
+      <h2>Changes</h2>
+      <p>We may update these terms at any time. Changes will be posted on this page.</p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+.breadcrumbs { padding: var(--space-4) 0; }
+.breadcrumbs ol { list-style: none; display: flex; gap: var(--space-2); padding: 0; margin: 0; font-size: 0.875rem; }
+.page-hero { background: var(--color-gray-50); padding: var(--space-12) 0; border-bottom: 1px solid var(--color-gray-200); }
+.page-hero h1 { margin-bottom: var(--space-3); }
+.page-hero p { color: var(--color-gray-600); }
+.section { padding: var(--space-12) 0; }
+.terms-content h2 { margin-top: var(--space-8); }
+.terms-content p { color: var(--color-gray-700); line-height: 1.7; }
+</style>

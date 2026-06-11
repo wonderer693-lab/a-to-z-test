@@ -1,0 +1,102 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import ReviewCard from '@components/ReviewCard.astro';
+import { getCollection } from 'astro:content';
+
+const reviews = await getCollection('review');
+const hvacReviews = reviews.filter(r =>
+  r.data.bestFor.toLowerCase().includes('hvac') ||
+  r.data.bestFor.toLowerCase().includes('heating')
+);
+const allComparisons = await getCollection('comparison');
+const hvacComparisons = allComparisons.filter(c => c.data.category === 'HVAC' || c.data.category === 'General');
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "HVAC Software Reviews and Comparisons",
+  "description": "Independent reviews of field service software for HVAC contractors.",
+};
+---
+
+<BaseLayout title="HVAC Software for Contractors - Reviews, Comparisons & Buying Guides" description="Compare the best field service management software for HVAC contractors. Independent reviews with HVAC-specific feature analysis." jsonLd={schema}>
+  <div class="container">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <ol><li><a href="/">Home</a></li><li aria-current="page">HVAC Software</li></ol>
+    </nav>
+  </div>
+
+  <section class="category-hero">
+    <div class="container">
+      <h1>HVAC Software for Contractors</h1>
+      <p>Field service software built for HVAC contractors. Compare scheduling, dispatching, invoicing, and compliance tools designed for heating and cooling businesses.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2>Top HVAC Software Reviews</h2>
+      <div class="grid grid-3">
+        {hvacReviews.map(r => <ReviewCard review={r} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+      <h2>HVAC Software Comparisons</h2>
+      <div class="grid grid-2">
+        {hvacComparisons.map(c => (
+          <div class="card comparison-preview">
+            <h3><a href={`/comparisons/${c.id}/`}>{c.data.title}</a></h3>
+            <p class="comparison-winner">Winner: <strong>{c.data.winner}</strong> - {c.data.winnerReason}</p>
+            <a href={`/comparisons/${c.id}/`} class="btn btn-outline">Read Comparison</a>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2>HVAC Resources</h2>
+      <div class="grid grid-3">
+        <div class="card resource-card">
+          <h3><a href="/features/scheduling-dispatch/">Scheduling & Dispatch</a></h3>
+          <p>How dispatch boards and scheduling tools work for HVAC contractors.</p>
+        </div>
+        <div class="card resource-card">
+          <h3><a href="/resources/faq/">FSM Software FAQ</a></h3>
+          <p>Answers to common questions about field service management software for HVAC.</p>
+        </div>
+        <div class="card resource-card">
+          <h3><a href="/guides/choosing-fsm-software/">How to Choose FSM Software</a></h3>
+          <p>8-step framework for picking the right platform for your HVAC business.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+.breadcrumbs { padding: var(--space-4) 0; }
+.breadcrumbs ol { list-style: none; display: flex; gap: var(--space-2); padding: 0; margin: 0; }
+.breadcrumbs li { font-size: 0.875rem; color: var(--color-gray-500); }
+.breadcrumbs li:not(:last-child)::after { content: '/'; margin-left: var(--space-2); color: var(--color-gray-300); }
+.breadcrumbs a { color: var(--color-gray-500); }
+.breadcrumbs [aria-current] { color: var(--color-gray-700); font-weight: 500; }
+
+.category-hero { background: var(--color-gray-50); padding: var(--space-12) 0; border-bottom: 1px solid var(--color-gray-200); }
+.category-hero h1 { margin-bottom: var(--space-3); }
+.category-hero p { color: var(--color-gray-600); max-width: 640px; font-size: 1.0625rem; }
+
+.section { padding: var(--space-12) 0; }
+.section-alt { background: var(--color-gray-50); }
+.section h2 { margin-top: 0; margin-bottom: var(--space-6); }
+
+.comparison-preview h3 { margin-top: 0; }
+.comparison-winner { color: var(--color-gray-600); font-size: 0.9375rem; }
+.resource-card h3 { font-size: 1.125rem; margin-top: 0; }
+.resource-card h3 a { color: var(--color-gray-900); }
+.resource-card p { color: var(--color-gray-600); font-size: 0.9375rem; }
+</style>

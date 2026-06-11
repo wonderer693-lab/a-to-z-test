@@ -1,0 +1,67 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const comparisons = await getCollection('comparison');
+  return comparisons.map(c => ({
+    params: { slug: c.id },
+    props: { comparison: c },
+  }));
+}
+
+const { comparison } = Astro.props;
+const { data, body } = comparison;
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": data.title,
+  "description": data.description,
+  "datePublished": data.pubDate.toISOString(),
+};
+---
+
+<BaseLayout title={data.title} description={data.description} jsonLd={jsonLd}>
+  <div class="container">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <ol>
+        <li><a href="/">Home</a></li>
+        <li><a href="/comparisons/">Comparisons</a></li>
+        <li aria-current="page">{data.tools.join(" vs ")}</li>
+      </ol>
+    </nav>
+  </div>
+
+  <article class="comparison-page">
+    <div class="container">
+      <header class="comparison-header">
+        <h1>{data.title}</h1>
+        <div class="comparison-winner-banner">
+          <span class="badge badge-green">Winner</span>
+          <span><strong>{data.winner}</strong>: {data.winnerReason}</span>
+        </div>
+      </header>
+
+      <div class="comparison-body">
+        <div set:html={body} />
+      </div>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+.breadcrumbs { padding: var(--space-4) 0; }
+.breadcrumbs ol { list-style: none; display: flex; gap: var(--space-2); padding: 0; margin: 0; }
+.breadcrumbs li { font-size: 0.875rem; color: var(--color-gray-500); }
+.breadcrumbs li:not(:last-child)::after { content: '/'; margin-left: var(--space-2); color: var(--color-gray-300); }
+.breadcrumbs a { color: var(--color-gray-500); }
+.breadcrumbs [aria-current] { color: var(--color-gray-700); font-weight: 500; }
+
+.comparison-page { padding-bottom: var(--space-16); }
+.comparison-header { margin-bottom: var(--space-8); }
+.comparison-header h1 { margin-bottom: var(--space-4); }
+.comparison-winner-banner { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-4); background: var(--color-green-light); border-radius: var(--border-radius); font-size: 1.0625rem; }
+.comparison-body { max-width: var(--content-width); line-height: 1.7; color: var(--color-gray-700); }
+.comparison-body p { margin-bottom: var(--space-4); }
+</style>

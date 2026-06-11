@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://fieldservicepros.com/sitemap-index.xml

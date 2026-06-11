@@ -1,0 +1,48 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Privacy Policy - FieldServicePros" description="Privacy policy for FieldServicePros. How we collect, use, and protect your information.">
+  <div class="container">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <ol><li><a href="/">Home</a></li><li aria-current="page">Privacy Policy</li></ol>
+    </nav>
+  </div>
+
+  <section class="page-hero">
+    <div class="container">
+      <h1>Privacy Policy</h1>
+      <p>How we handle your data.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container content privacy-content">
+      <h2>Information we collect</h2>
+      <p>We collect minimal information. If you contact us, we keep your email address and message. If you subscribe to our newsletter, we keep your email address. We do not sell your information to anyone.</p>
+
+      <h2>Cookies</h2>
+      <p>We use minimal cookies for basic functionality. We do not use tracking cookies or third-party advertising cookies. Our analytics are privacy-focused and do not track individual users.</p>
+
+      <h2>Affiliate links</h2>
+      <p>Some links on this site are affiliate links. When you click these links and make a purchase, we may earn a commission. These links are identified with a sponsored attribute. No personal data is transmitted through these links.</p>
+
+      <h2>Third-party services</h2>
+      <p>We use affiliate networks and analytics providers that may set their own cookies. These services have their own privacy policies. We recommend reviewing them for more information.</p>
+
+      <h2>Contact</h2>
+      <p>For privacy-related questions, contact us at contact@fieldservicepros.com.</p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+.breadcrumbs { padding: var(--space-4) 0; }
+.breadcrumbs ol { list-style: none; display: flex; gap: var(--space-2); padding: 0; margin: 0; font-size: 0.875rem; }
+.page-hero { background: var(--color-gray-50); padding: var(--space-12) 0; border-bottom: 1px solid var(--color-gray-200); }
+.page-hero h1 { margin-bottom: var(--space-3); }
+.page-hero p { color: var(--color-gray-600); }
+.section { padding: var(--space-12) 0; }
+.privacy-content h2 { margin-top: var(--space-8); }
+.privacy-content p { color: var(--color-gray-700); line-height: 1.7; }
+</style>

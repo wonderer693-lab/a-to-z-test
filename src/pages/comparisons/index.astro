@@ -1,0 +1,78 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const comparisons = await getCollection('comparison');
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "Field Service Software Comparisons",
+  "description": "Side-by-side comparisons of the top field service management platforms for contractors.",
+};
+---
+
+<BaseLayout title="Field Service Software Comparisons - Side-by-Side Reviews" description="Compare field service management software side by side. Independent comparisons of ServiceTitan, Housecall Pro, Jobber, and more." jsonLd={schema}>
+  <div class="container">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <ol><li><a href="/">Home</a></li><li aria-current="page">Comparisons</li></ol>
+    </nav>
+  </div>
+
+  <section class="page-hero">
+    <div class="container">
+      <h1>Field Service Software Comparisons</h1>
+      <p>Side-by-side comparisons of the top field service management platforms. We break down pricing, features, and what each tool does best.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="comparisons-grid">
+        {comparisons.map(c => (
+          <div class="card comparison-card">
+            <div class="comparison-card-header">
+              <h2><a href={`/comparisons/${c.id}/`}>{c.data.title}</a></h2>
+              <span class="badge badge-accent">{c.data.category}</span>
+            </div>
+            <div class="comparison-tools">
+              {c.data.tools.map(t => <span class="tool-chip">{t}</span>)}
+            </div>
+            <p class="comparison-summary">{c.data.description}</p>
+            <div class="comparison-winner-box">
+              <span class="badge badge-green">Winner: {c.data.winner}</span>
+              <p>{c.data.winnerReason}</p>
+            </div>
+            <a href={`/comparisons/${c.id}/`} class="btn btn-outline">Read Full Comparison</a>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+.breadcrumbs { padding: var(--space-4) 0; }
+.breadcrumbs ol { list-style: none; display: flex; gap: var(--space-2); padding: 0; margin: 0; }
+.breadcrumbs li { font-size: 0.875rem; color: var(--color-gray-500); }
+.breadcrumbs li:not(:last-child)::after { content: '/'; margin-left: var(--space-2); color: var(--color-gray-300); }
+.breadcrumbs a { color: var(--color-gray-500); }
+.breadcrumbs [aria-current] { color: var(--color-gray-700); font-weight: 500; }
+
+.page-hero { background: var(--color-gray-50); padding: var(--space-12) 0; border-bottom: 1px solid var(--color-gray-200); }
+.page-hero h1 { margin-bottom: var(--space-3); }
+.page-hero p { color: var(--color-gray-600); max-width: 640px; font-size: 1.0625rem; }
+
+.section { padding: var(--space-12) 0; }
+.comparisons-grid { display: grid; grid-template-columns: 1fr; gap: var(--space-6); max-width: 800px; }
+
+.comparison-card h2 { margin-top: 0; font-size: 1.25rem; }
+.comparison-card h2 a { color: var(--color-gray-900); }
+.comparison-card-header { display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-3); flex-wrap: wrap; }
+.comparison-tools { display: flex; gap: var(--space-2); flex-wrap: wrap; margin-top: var(--space-2); }
+.tool-chip { background: var(--color-gray-100); padding: var(--space-1) var(--space-3); border-radius: 999px; font-size: 0.8125rem; font-weight: 500; color: var(--color-gray-600); }
+.comparison-summary { color: var(--color-gray-600); margin-top: var(--space-3); }
+.comparison-winner-box { margin-top: var(--space-3); padding: var(--space-3); background: var(--color-green-light); border-radius: var(--border-radius); }
+.comparison-winner-box p { margin: var(--space-2) 0 0; font-size: 0.9375rem; color: var(--color-gray-700); }
+.comparison-card .btn { margin-top: var(--space-3); }
+</style>

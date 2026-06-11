@@ -1,0 +1,81 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import ReviewCard from '@components/ReviewCard.astro';
+import { getCollection } from 'astro:content';
+
+const reviews = await getCollection('review');
+const elecReviews = reviews.filter(r =>
+  r.data.bestFor.toLowerCase().includes('electrical')
+);
+const allComparisons = await getCollection('comparison');
+const elecComparisons = allComparisons.filter(c => c.data.category === 'Electrical' || c.data.category === 'General');
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "Electrical Contractor Software Reviews",
+  "description": "Independent reviews of field service software for electrical contractors.",
+};
+---
+
+<BaseLayout title="Electrical Contractor Software - Reviews, Comparisons & Buying Guides" description="Compare the best field service management software for electrical contractors. Independent reviews with electrical-specific feature analysis." jsonLd={schema}>
+  <div class="container">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <ol><li><a href="/">Home</a></li><li aria-current="page">Electrical Software</li></ol>
+    </nav>
+  </div>
+
+  <section class="category-hero">
+    <div class="container">
+      <h1>Electrical Contractor Software</h1>
+      <p>Field service software built for electrical contractors. Compare scheduling, code compliance, project estimation, and invoicing tools.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2>Top Electrical Software Reviews</h2>
+      <div class="grid grid-3">
+        {elecReviews.map(r => <ReviewCard review={r} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+      <h2>Electrical Resources</h2>
+      <div class="grid grid-3">
+        <div class="card resource-card">
+          <h3><a href="/features/mobile-field-app/">Mobile Field App Guide</a></h3>
+          <p>What electrical contractors need in a mobile field app.</p>
+        </div>
+        <div class="card resource-card">
+          <h3><a href="/guides/choosing-fsm-software/">How to Choose FSM Software</a></h3>
+          <p>8-step framework for picking the right platform for your electrical business.</p>
+        </div>
+        <div class="card resource-card">
+          <h3><a href="/resources/faq/">FSM Software FAQ</a></h3>
+          <p>Answers to common questions about field service management software for electricians.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+.breadcrumbs { padding: var(--space-4) 0; }
+.breadcrumbs ol { list-style: none; display: flex; gap: var(--space-2); padding: 0; margin: 0; }
+.breadcrumbs li { font-size: 0.875rem; color: var(--color-gray-500); }
+.breadcrumbs li:not(:last-child)::after { content: '/'; margin-left: var(--space-2); color: var(--color-gray-300); }
+.breadcrumbs a { color: var(--color-gray-500); }
+.breadcrumbs [aria-current] { color: var(--color-gray-700); font-weight: 500; }
+.category-hero { background: var(--color-gray-50); padding: var(--space-12) 0; border-bottom: 1px solid var(--color-gray-200); }
+.category-hero h1 { margin-bottom: var(--space-3); }
+.category-hero p { color: var(--color-gray-600); max-width: 640px; font-size: 1.0625rem; }
+.section { padding: var(--space-12) 0; }
+.section-alt { background: var(--color-gray-50); }
+.section h2 { margin-top: 0; margin-bottom: var(--space-6); }
+.resource-card h3 { font-size: 1.125rem; margin-top: 0; }
+.resource-card h3 a { color: var(--color-gray-900); }
+.resource-card p { color: var(--color-gray-600); font-size: 0.9375rem; }
+</style>
